@@ -1,33 +1,41 @@
 spring:
+  #datasource dynamic
   datasource:
+    username: ${db.username}
+    password: ${db.password}
     hikari:
-      connection-timeout: 20000
-      maximum-pool-size: 5
-    password: companies2025
-    username: servicecompanies
-    url: jdbc:postgresql://localhost:5432/companies
+      maximum-pool-size: ${db.maximum-pool-size}
+      connection-timeout: ${db.connection-timeout}
+    url: ${db.url}
+
+
   application:
     name: companies-crud
+  profiles:
+    #default: prod   #profile pro in production
+    #name of profile in test
+   default: default #name of profile
+  config:
+    import: "optional:configserver:http://localhost:7777"
   jpa:
     show-sql: 'true'
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: 'true'
+
+server:
+  servlet:
+    context-path: /companies-crud
+  port:  8081 #port:8081 ó port:0
+#config of Logg for traceability
 logging:
   level:
     org:
       hibernate:
+        SQL: DEBUG
         type:
           descriptor:
             sql:
               BasicBinder: TRACE
-        SQL: DEBUG
-server:
-  servlet:
-    context-path: /companies-crud
-  port: 0
 
 eureka:
   instance:
