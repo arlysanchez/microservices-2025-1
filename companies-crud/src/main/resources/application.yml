@@ -1,14 +1,4 @@
 spring:
-  #datasource dynamic
-  datasource:
-    username: ${db.username}
-    password: ${db.password}
-    hikari:
-      maximum-pool-size: ${db.maximum-pool-size}
-      connection-timeout: ${db.connection-timeout}
-    url: ${db.url}
-
-
   application:
     name: companies-crud
   profiles:
@@ -16,11 +6,23 @@ spring:
     #name of profile in test
    default: default #name of profile
   config:
-    import: "optional:configserver:http://localhost:7777"
+    import: "configserver:http://localhost:7777"
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${db.maximum-pool-size}
+      connection-timeout: ${db.connection-timeout}
+    initialization-mode: always
+
   jpa:
-    show-sql: 'true'
+    show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   servlet:
@@ -29,6 +31,14 @@ server:
 #config of Logg for traceability
 logging:
   level:
+    # Asegura que los logs INFO de tu paquete sean visibles
+    upeu.edu.pe.companies_crud: INFO # O DEBUG si quieres más detalle aún
+    # ... (tus otros niveles DEBUG que ya tenías)
+    org.springframework.cloud.config.client: DEBUG
+    org.springframework.cloud.bootstrap: DEBUG
+    org.springframework.boot.context.config: DEBUG
+    com.zaxxer.hikari: DEBUG
+    # ... (tu config de SQL/Hibernate)
     org:
       hibernate:
         SQL: DEBUG

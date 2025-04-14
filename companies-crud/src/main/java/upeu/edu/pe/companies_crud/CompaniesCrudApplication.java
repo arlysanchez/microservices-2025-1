@@ -6,10 +6,13 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient //habilitar el registro en el registry-server
-public class CompaniesCrudApplication {
-
+public class CompaniesCrudApplication  {
 	public static void main(String[] args) {
 		SpringApplication.run(CompaniesCrudApplication.class, args);
 	}
 
-}
+	}
+
+
+
+
