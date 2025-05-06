@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: report-ms
+  profiles:
+    default: default #name of profile OR profile prod
+  config:
+    import: "configserver:http://localhost:7777"
+    #import: "optional:configserver:${CONFIG_SERVER_HOST}"
+
+  #config for connection a kafka
+
+  #cloud:
+    #stream:
+      #kafka:
+        #binder:
+          #brokers: ${BROKER_URL}
+      #function:
+        #bindings:
+          #consumerReport-out-0: #consumerReport-out --> consumerReport <-- consumerReport-in
+            #destination: consumerReport
+
+server:
+  servlet:
+    context-path: /report-ms
+  port:  7070 #puerto 7070, o puerto:0 (cuando usamos el gateway)
+
+#config register Eureka
+eureka:
+  instance:
+    instance-id: "${spring.application.name}:${random.value}"
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+
