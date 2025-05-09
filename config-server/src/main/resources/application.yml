@@ -12,7 +12,7 @@ spring:
           clone-on-start: true
           #usamos user and password when repository is private en github
           username: arlysanchez
-          password: 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
+          #password: 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
           #use variable entorno
           #password: ${GIT_TOKEN}
 server:
