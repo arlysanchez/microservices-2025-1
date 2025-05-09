@@ -11,18 +11,23 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class ReportMsApplication implements CommandLineRunner {
+public class ReportMsApplication /*implements CommandLineRunner */{
+	/*
+	solo hemos activado el metodo CommandLineRunner para testear la conexion
 	@Autowired
-	private EurekaClient eurekaClient;
+	private EurekaClient eurekaClient;*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReportMsApplication.class, args);
 	}
 
+	/*
 	@Override
 	public void run(String... args) throws Exception {
 		this.eurekaClient.getAllKnownRegions().forEach(System.out::println);
 		System.out.println(this.eurekaClient.getApplication("companies-crud"));
 
 	}
+	*/
+
 }
