@@ -22,7 +22,7 @@ spring:
 server:
   servlet:
     context-path: /report-ms
-  port:  7070 #puerto 7070, o puerto:0 (cuando usamos el gateway)
+  port:  0 #puerto 7070, o puerto:0 (cuando usamos el gateway)
 
 #config register Eureka
 eureka:
