@@ -2,17 +2,88 @@ version: '3.8'
 
 services:
 
-    db:
-      image: postgres:16.1
-      container_name: db-companies
-      restart: always
-      volumes:
-        - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
-        - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
-      environment:
-        POSTGRES_DB: 'companies'
-        POSTGRES_USER: 'servicecompanies'
-        POSTGRES_PASSWORD: 'Companies2025@'
-      ports:
-        - '5432:5432'
-    
+  db:
+    image: postgres:16.1
+    container_name: db-companies
+    restart: always
+    volumes:
+      - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    environment:
+      POSTGRES_DB: 'companies'
+      POSTGRES_USER: 'servicecompanies'
+      POSTGRES_PASSWORD: 'Companies2025@'
+    ports:
+      - '5432:5432'
+
+  ms-registry-server:
+    image: ms-registry-server:latest
+    build: ./registry-server
+    container_name: ms-registry-server
+    restart: always
+    ports:
+      - "8761:8761"
+
+  ms-config-server:
+    image: ms-config-server:latest
+    build: ./config-server
+    container_name: ms-config-server
+    restart: always
+    ports:
+      - "7777:7777"
+    depends_on:
+      - ms-registry-server
+    environment:
+      EUREKA_URL: http://ms-registry-server:8761/eureka/
+
+  ms-companies:
+    image: ms-companies:latest
+    build: ./companies-crud
+    container_name: ms-companies
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - ms-config-server
+      - db
+    environment:
+      EUREKA_URL: http://ms-registry-server:8761/eureka/
+      CONFIG_SERVER_HOST: 'http://ms-config-server:7777'
+
+  ms-report:
+    image: ms-report:latest
+    build: ./report-ms
+    container_name: ms-report
+    restart: always
+    ports:
+      - "7070:7070"
+    depends_on:
+      - ms-config-server
+    environment:
+      EUREKA_URL: http://ms-registry-server:8761/eureka/
+      CONFIG_SERVER_HOST: 'http://ms-config-server:7777'
+
+  ms-auth:
+    image: ms-auth-server:latest
+    build: ./auth-server
+    container_name: ms-auth
+    restart: always
+    ports:
+      - "3030:3030"
+    depends_on:
+      - ms-config-server
+    environment:
+      EUREKA_URL: http://ms-registry-server:8761/eureka/
+      CONFIG_SERVER_HOST: 'http://ms-config-server:7777'
+
+  ms-gateway:
+    image: ms-gateway:latest
+    build: ./gateway
+    container_name: ms-gateway
+    restart: always
+    ports:
+      - "4040:4040"
+    depends_on:
+      - ms-config-server
+    environment:
+      EUREKA_URL: http://ms-registry-server:8761/eureka/

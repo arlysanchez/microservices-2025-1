@@ -24,7 +24,7 @@ eureka:
   client:
     service-url:
       #static no docker
-      defaultZone: http://localhost:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
       #dynamic with build docker
-      #defaultZone: ${EUREKA_URL}
+      defaultZone: ${EUREKA_URL}
 
